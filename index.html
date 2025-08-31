@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Common Astronomical Phenomena</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    /* Sticky navigation */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 999;
+      background-color: #0d1b2a;
+    }
+    nav a {
+      color: white;
+      text-decoration: none;
+    }
+    nav a:hover {
+      color: #ffd700;
+    }
+
+    /* Hero section */
+    .hero {
+      position: relative;
+      height: 400px;
+      overflow: hidden;
+    }
+    .hero img, .hero video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+    .hero img:hover {
+      transform: scale(1.05);
+    }
+
+    /* Accordion */
+    .accordion-button:focus {
+      box-shadow: none;
+    }
+
+    /* Form validation */
+    input:invalid {
+      border-color: red;
+    }
+    input:valid {
+      border-color: green;
+    }
+
+    /* Custom search results */
+    .search-results {
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+<div id="app">
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">Astronomy SPA</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="#hero">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="#carousel">Gallery</a></li>
+          <li class="nav-item"><a class="nav-link" href="#accordion">Learn</a></li>
+          <li class="nav-item"><a class="nav-link" href="#forms">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section id="hero" class="hero">
+    <video autoplay muted loop>
+      <source src="https://www.w3schools.com/howto/rain.mp4" type="video/mp4">
+    </video>
+  </section>
+
+  <!-- Carousel Section -->
+  <section id="carousel" class="container my-5">
+    <div id="astroCarousel" class="carousel slide" data-bs-ride="carousel">
+      <div class="carousel-inner">
+        <div class="carousel-item active">
+          <img src="https://via.placeholder.com/1200x400?text=Solar+Eclipse" class="d-block w-100" alt="Solar Eclipse">
+        </div>
+        <div class="carousel-item">
+          <img src="https://via.placeholder.com/1200x400?text=Meteor+Shower" class="d-block w-100" alt="Meteor Shower">
+        </div>
+        <div class="carousel-item">
+          <img src="https://via.placeholder.com/1200x400?text=Aurora" class="d-block w-100" alt="Aurora">
+        </div>
+      </div>
+      <button class="carousel-control-prev" type="button" data-bs-target="#astroCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon"></span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#astroCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon"></span>
+      </button>
+    </div>
+  </section>
+
+  <!-- Accordion Section -->
+  <section id="accordion" class="container my-5">
+    <h2>Common Astronomical Phenomena</h2>
+    <div class="accordion" id="phenomenaAccordion">
+      <div class="accordion-item" v-for="(item, index) in accordionItems" :key="index">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                  :data-bs-target="'#collapse' + index">{{ item.title }}</button>
+        </h2>
+        <div :id="'collapse' + index" class="accordion-collapse collapse">
+          <div class="accordion-body">{{ item.description }}</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Forms Section -->
+  <section id="forms" class="container my-5">
+    <h2>Contact Form</h2>
+    <form @submit.prevent="submitForm" novalidate>
+      <div class="mb-3">
+        <label for="name" class="form-label">Name</label>
+        <input v-model="form.name" type="text" class="form-control" id="name" required @input="validateField('name')">
+        <div class="text-danger" v-if="errors.name">{{ errors.name }}</div>
+      </div>
+      <div class="mb-3">
+        <label for="email" class="form-label">Email</label>
+        <input v-model="form.email" type="email" class="form-control" id="email" required @input="validateField('email')">
+        <div class="text-danger" v-if="errors.email">{{ errors.email }}</div>
+      </div>
+      <div class="mb-3">
+        <label for="message" class="form-label">Message</label>
+        <textarea v-model="form.message" class="form-control" id="message" required @input="validateField('message')"></textarea>
+        <div class="text-danger" v-if="errors.message">{{ errors.message }}</div>
+      </div>
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+  </section>
+
+  <!-- Search Section -->
+  <section class="container my-5">
+    <h2>Search Phenomena</h2>
+    <input type="text" class="form-control" placeholder="Search..." v-model="searchQuery" @input="search">
+    <ul class="list-group search-results">
+      <li class="list-group-item" v-for="item in searchResults" :key="item.title">{{ item.title }}</li>
+    </ul>
+  </section>
+</div>
+
+<!-- Vue and Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/vue@3.3.4/dist/vue.global.prod.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+const app = Vue.createApp({
+  data() {
+    return {
+      accordionItems: [
+        { title: "Solar Eclipse", description: "A solar eclipse occurs when the Moon passes between the Earth and the Sun." },
+        { title: "Lunar Eclipse", description: "A lunar eclipse occurs when the Earth passes between the Sun and the Moon." },
+        { title: "Meteor Shower", description: "Meteor showers are caused by Earth passing through debris left by comets." },
+        { title: "Aurora", description: "Auroras are caused by charged particles from the Sun interacting with Earth's magnetic field." },
+        { title: "Comets", description: "Comets are icy bodies that release gas and dust when near the Sun, forming a tail." }
+      ],
+      form: {
+        name: "",
+        email: "",
+        message: ""
+      },
+      errors: {},
+      searchQuery: "",
+      searchResults: []
+    }
+  },
+  methods: {
+    validateField(field) {
+      if (!this.form[field]) {
+        this.errors[field] = "This field is required.";
+      } else {
+        this.errors[field] = "";
+      }
+      if (field === "email" && this.form.email) {
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailPattern.test(this.form.email)) {
+          this.errors.email = "Invalid email address.";
+        }
+      }
+    },
+    submitForm() {
+      for (let field in this.form) {
+        this.validateField(field);
+      }
+      if (Object.values(this.errors).every(e => e === "")) {
+        alert("Form submitted successfully!");
+        this.form.name = "";
+        this.form.email = "";
+        this.form.message = "";
+      }
+    },
+    search() {
+      this.searchResults = this.accordionItems.filter(item =>
+        item.title.toLowerCase().includes(this.searchQuery.toLowerCase())
+      );
+    }
+  }
+});
+
+app.mount("#app");
+</script>
+</body>
+</html>
